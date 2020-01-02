@@ -1,7 +1,7 @@
 package ehu.isad;
 
-import ehu.isad.controller.KautotuKud;
-import ehu.isad.controller.MainKud;
+import ehu.isad.controller.ui.NagusiaKud;
+import ehu.isad.controller.ui.EzarpenakKud;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,18 +9,16 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.Locale;
-import java.util.ResourceBundle;
 
 public class Main extends Application {
 
-  private Parent kautotuUI;
-  private Parent mainUI;
+  private Parent nagusiaUI;
+  private Parent ezarpenakUI;
 
   private Stage stage;
 
-  private KautotuKud kautotuKud;
-  private MainKud mainKud;
+  private NagusiaKud nagusiaKud;
+  private EzarpenakKud ezarpenakKud;
 
 
   @Override
@@ -29,26 +27,22 @@ public class Main extends Application {
     stage = primaryStage;
     pantailakKargatu();
 
-    stage.setTitle("Argazki Backup");
-    stage.setScene(new Scene(kautotuUI, 450, 275));
+    stage.setTitle("Ezarpenak lortu");
+    stage.setScene(new Scene(nagusiaUI, 450, 275));
     stage.show();
   }
 
   private void pantailakKargatu() throws IOException {
 
-    Locale locale = new Locale("eu","ES");
-    ResourceBundle bundle = ResourceBundle.getBundle("UIResources", locale);
+    FXMLLoader loaderKautotu = new FXMLLoader(getClass().getResource("/NagusiaUI.fxml"));
+    nagusiaUI = (Parent) loaderKautotu.load();
+    nagusiaKud = loaderKautotu.getController();
+    nagusiaKud.setMainApp(this);
 
-
-    FXMLLoader loaderKautotu = new FXMLLoader(getClass().getResource("/kautotu.fxml"), bundle);
-    kautotuUI = (Parent) loaderKautotu.load();
-    kautotuKud = loaderKautotu.getController();
-    kautotuKud.setMainApp(this);
-
-    FXMLLoader loaderMain = new FXMLLoader(getClass().getResource("/main.fxml"), bundle);
-    mainUI = (Parent) loaderMain.load();
-    mainKud = loaderMain.getController();
-    mainKud.setMainApp(this);
+    FXMLLoader loaderMain = new FXMLLoader(getClass().getResource("/EzarpenakUI.fxml"));
+    ezarpenakUI = (Parent) loaderMain.load();
+    ezarpenakKud = loaderMain.getController();
+    ezarpenakKud.setMainApp(this);
   }
 
 
@@ -56,8 +50,9 @@ public class Main extends Application {
     launch(args);
   }
 
-  public void mainErakutsi() {
-    stage.setScene(new Scene(mainUI));
+  public void ezarpenakErakutsi() {
+    stage.setScene(new Scene(ezarpenakUI));
     stage.show();
+    ezarpenakKud.getEzarpenak();
   }
 }
